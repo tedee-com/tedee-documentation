@@ -113,17 +113,18 @@ Occures when Tedee Lock status has changed
 	    "deviceId": 33819,
 	    "serialNumber": "19420103-000006",
 	    "state": 6,
-	    "jammed": 0
+	    "jammed": 0,
+	    "doorState": 2
 	  }
 	}
 	
 **Request for GET method**
 
-	<<YOUR_WEBHOOK_URL>>?event=lock-status-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006&state=6&jammed=0
+	<<YOUR_WEBHOOK_URL>>?event=lock-status-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006&state=6&jammed=0&doorState=2
 
 **Request for GET+NO_PARAMS method**
 
-	<<YOUR_WEBHOOK_URL>>/event=lock-status-changed/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006/state=6/jammed=0
+	<<YOUR_WEBHOOK_URL>>/event=lock-status-changed/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006/state=6/jammed=0/doorState=2
 
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
@@ -145,6 +146,13 @@ The ``state`` field may have the following values:
 The ``jammed`` field may have the following values:
 - 0 - not jammed
 - 1 - jammed
+
+The ``doorState`` field may have the following values:
+- 0 - NotPaired
+- 1 - Disconnected
+- 2 - Opened
+- 3 - Closed
+- 4 - Uncalibrated
 
 ## Device battery level changed
 
