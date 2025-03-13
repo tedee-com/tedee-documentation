@@ -1006,6 +1006,20 @@
               0
             ]
           },
+          "doorState": {
+            "type": "integer",
+            "description": "0-NotPaired, 1-Disconnected, 2-Opened, 3-Closed, 4-Uncalibrated",
+            "enum": [
+              0,
+              1,
+              2,
+              3,
+              4
+            ],
+            "examples": [
+              2
+            ]
+          },          
           "batteryLevel": {
             "type": "integer",
             "format": "int32",
