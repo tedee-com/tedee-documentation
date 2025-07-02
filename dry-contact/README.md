@@ -2,6 +2,10 @@
 
 ## Overview
 
+This documentation provides instructions for custom configuring the Tedee dry contact by creating your own configuration file. The Tedee dry contact connects to an existing wired system, enabling wireless control of the Tedee lock using wired signals.
+
+### Legal Notice
+By using this API, you agree to our [Terms of Use](https://tedee.com/terms-of-use-tedee-apis-and-sdks/).
 
 ## Contibution
 If you think that there are some areas that should be improved or extended please let us know by creating an [issue](https://github.com/tedee-com/tedee-bridge-api/issues).

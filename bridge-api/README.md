@@ -4,6 +4,9 @@
 
 The Tedee Bridge API provides a robust interface for controlling paired devices in your local network. This API, exposed over HTTP, offers comprehensive features to interact with Tedee Locks and Bridges, ensuring easy integration and efficient control.
 
+### Legal Notice
+By using this API, you agree to our [Terms of Use](https://tedee.com/terms-of-use-tedee-apis-and-sdks/).
+
 ## Contibution
 If you think that there are some areas that should be improved or extended please let us know by creating an [issue](https://github.com/tedee-com/tedee-bridge-api/issues).
 However, we also highly encourage you to contribute to this repo, wheather you want to add some description, guide or provide a sample code.

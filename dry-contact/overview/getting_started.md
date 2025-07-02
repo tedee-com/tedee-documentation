@@ -1,3 +1,4 @@
+
 Dry Contact script language structure, derived from JSON, allows configuration of inputs and outputs in the following format:
 
 ```json
@@ -13,7 +14,8 @@ Dry Contact script language structure, derived from JSON, allows configuration o
 - **CONDITIONS:** Conditions to be met to call the actions.
 - **ACTIONS:** Actions to perform.
 
-
+## Legal Notice
+By using this API, you agree to our [Terms of Use](https://tedee.com/terms-of-use-tedee-apis-and-sdks/).
 
 ## TRIGGERS
 

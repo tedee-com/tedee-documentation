@@ -6,6 +6,9 @@ Tedee Documentation is the primary resource for exploring the platform's feature
 
 Whether you're setting up a new device, troubleshooting, or diving into advanced functionalities, this documentation serves as your go-to reference.
 
+### Legal Notice
+By using this API, you agree to our [Terms of Use](https://tedee.com/terms-of-use-tedee-apis-and-sdks/).
+
 ## Contribution
 If you think that there are some areas that should be improved or extended please let us know by creating an [issue](https://github.com/tedee-com/tedee-bridge-api/issues) with changes to specific documentation in subdirectories.
 However, we also highly encourage you to contribute to this repo, wheather you want to add some description, guide or provide a sample code.
