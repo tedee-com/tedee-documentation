@@ -1,16 +1,14 @@
-# Tedee Documentation
+# Tedee Dry Contact Script
 
 ## Overview
 
-Tedee Documentation is the primary resource for exploring the platform's features, supported devices, and their detailed descriptions. Here, you will find comprehensive guides, step-by-step instructions, and in-depth explanations to help you understand and make the most of Tedee products and services.
-
-Whether you're setting up a new device, troubleshooting, or diving into advanced functionalities, this documentation serves as your go-to reference.
+This documentation provides instructions for custom configuring the Tedee dry contact by creating your own configuration file. The Tedee dry contact connects to an existing wired system, enabling wireless control of the Tedee lock using wired signals.
 
 ### Legal Notice
 By using this API, you agree to our [Terms of Use](https://tedee.com/terms-of-use-tedee-apis-and-sdks/).
 
-## Contribution
-If you think that there are some areas that should be improved or extended please let us know by creating an [issue](https://github.com/tedee-com/tedee-bridge-api/issues) with changes to specific documentation in subdirectories.
+## Contibution
+If you think that there are some areas that should be improved or extended please let us know by creating an [issue](https://github.com/tedee-com/tedee-bridge-api/issues).
 However, we also highly encourage you to contribute to this repo, wheather you want to add some description, guide or provide a sample code.
 
 ### Documentation specification
@@ -24,7 +22,7 @@ The documentation is:
 
 ### How to start
 
-1. **Clone the Repository**: First, clone the repository to your local machine using `git clone https://github.com/tedee-com/tedee-documentation.git`.
+1. **Clone the Repository**: First, clone the repository to your local machine using `git clone https://github.com/tedee-com/tedee-bridge-api.git`.
 
 2. **Open Terminal**: Navigate to the root directory of this repository using your terminal or command prompt.
 
@@ -37,10 +35,31 @@ The documentation is:
     - This will start a local web server to serve the project files.
 
 5. **Access the Application**:
-    - After running `live-server`, app will be available at `http://localhost:8080.`
+    - After running `live-server`, app will be available at `http://localhost:8080/dry-contact.`
     - Open this link in your web browser to view and interact with the project.
 
 ### Next Steps
 
 - After successfully launching the project, you can start exploring the codebase.
 - Feel free to make modifications and test them in real-time using the local server.
+
+## Getting Started
+
+Refer to the `Getting Started` guide for initial setup and basic operations. Essential information on authentication, lock synchronization, and operation is provided to help you seamlessly integrate the API into your application.
+
+## Further Information
+
+For additional information, refer to the `Useful links` section. Stay updated with the latest changes and improvements in the `Release Notes`.
+
+## Contact
+
+For support or queries, please contact us at support@tedee.com.
+
+## Version
+
+Current API version: 1.2
+
+---
+
+This documentation is part of the Tedee API suite, designed to provide a seamless and efficient experience for developers working with Tedee products.
+

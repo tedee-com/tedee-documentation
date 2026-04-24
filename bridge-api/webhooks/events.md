@@ -1,4 +1,4 @@
- ![](/assets/github-logo.svg "GitHub Logo") [Edit on Github](https://github.com/tedee-com/tedee-bridge-api/blob/master/webhooks/events.md)
+ ![](/assets/github-logo.svg "GitHub Logo") [Edit on Github](https://github.com/tedee-com/tedee-documentation/blob/master/bridge-api/webhooks/events.md)
 
 All webhook request bodies configured as "POST" in the method name, has very similar JSON structure which consists of:
 - **event** - an unique event name
@@ -6,6 +6,7 @@ All webhook request bodies configured as "POST" in the method name, has very sim
 - **data** - the data object specific to the event type/name
 
 For webhooks configured as "GET" in the method name, there are no content bodies and all values are passed as "query string" parameters.
+For webhooks configured as "GET+NO_PARAMS" in the method name, there are no content bodies and all values are passed in the path delimited by "/" character. No "?" or "&" characters will be used in the URL request.
 
 See the list of available webhook events and examples below.
   
@@ -28,11 +29,13 @@ Occures when Tedee Bridge gets or looses connection to Tedee Cloud.
 
 	<<YOUR_WEBHOOK_URL>>?event=backend-connection-changed&timestamp=2023-07-25T14:41:48.825Z&isConnected=1
 	
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=backend-connection-changed/timestamp=2023-07-25T14:41:48.825Z/isConnected=1
+
 The ``isConnected`` field may have the following values:
 - 0 - disconnected
 - 1 - connected
-
-
 
 ## Device connection changed
 
@@ -55,6 +58,10 @@ Occures when Tedee Lock gets or looses connection to the Bridge.
 
 	<<YOUR_WEBHOOK_URL>>?event=device-connection-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006&isConnected=1
 
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=device-connection-changed/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006/isConnected=1
+	
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
 - 4 for Lock GO. 
@@ -83,6 +90,10 @@ Occures when settings has changed for Tedee Lock.
 
 	<<YOUR_WEBHOOK_URL>>?event=device-settings-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006
 
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=device-settings-changed/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006
+
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
 - 4 for Lock GO. 
@@ -102,13 +113,18 @@ Occures when Tedee Lock status has changed
 	    "deviceId": 33819,
 	    "serialNumber": "19420103-000006",
 	    "state": 6,
-	    "jammed": 0
+	    "jammed": 0,
+	    "doorState": 2
 	  }
 	}
 	
 **Request for GET method**
 
-	<<YOUR_WEBHOOK_URL>>?event=lock-status-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006&state=6&jammed=0
+	<<YOUR_WEBHOOK_URL>>?event=lock-status-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006&state=6&jammed=0&doorState=2
+
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=lock-status-changed/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006/state=6/jammed=0/doorState=2
 
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
@@ -131,6 +147,13 @@ The ``jammed`` field may have the following values:
 - 0 - not jammed
 - 1 - jammed
 
+The ``doorState`` field may have the following values:
+- 0 - NotPaired
+- 1 - Disconnected
+- 2 - Opened
+- 3 - Closed
+- 4 - Uncalibrated
+
 ## Device battery level changed
 
 Occures when Tedee Lock battery level changes
@@ -152,6 +175,10 @@ Occures when Tedee Lock battery level changes
 
 	<<YOUR_WEBHOOK_URL>>?event=device-battery-level-changed&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006&batteryLevel=90
 
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=device-battery-level-changed/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006/batteryLevel=90
+	
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
 - 4 for Lock GO. 
@@ -181,6 +208,10 @@ Occures when Tedee Lock (PRO) starts charging
 
 	<<YOUR_WEBHOOK_URL>>?event=device-battery-start-charging&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006
 	
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=device-battery-start-charging/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006
+
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
 - 4 for Lock GO. 
@@ -205,6 +236,10 @@ Occures when Tedee Lock (PRO) stops charging
 
 	<<YOUR_WEBHOOK_URL>>?event=device-battery-stop-charging&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006
 
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=device-battery-stop-charging/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006
+
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 
 - 4 for Lock GO. 
@@ -228,6 +263,10 @@ Occures when Tedee Lock (PRO) is fully charged
 **Request for GET method**
 
 	<<YOUR_WEBHOOK_URL>>?event=device-battery-fully-charged&timestamp=2023-07-25T14:41:48.825Z&deviceType=2&deviceId=33819&serialNumber=19420103-000006
+
+**Request for GET+NO_PARAMS method**
+
+	<<YOUR_WEBHOOK_URL>>/event=device-battery-fully-charged/timestamp=2023-07-25T14:41:48.825Z/deviceType=2/deviceId=33819/serialNumber=19420103-000006
 
 The ``deviceType`` field may have the following values:
 - 2 for Lock PRO 

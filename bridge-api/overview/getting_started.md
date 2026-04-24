@@ -1,4 +1,4 @@
- ![](/assets/github-logo.svg "GitHub Logo") [Edit on Github](https://github.com/tedee-com/tedee-bridge-api/blob/master/overview/getting_started.md)
+ ![](/assets/github-logo.svg "GitHub Logo") [Edit on Github](https://github.com/tedee-com/tedee-documentation/blob/master/bridge-api/overview/getting_started.md)
 
 Welcome to the Tedee Bridge API, specifically designed to operate within your local network. Here are some key points to get you started:
 
@@ -12,11 +12,14 @@ Welcome to the Tedee Bridge API, specifically designed to operate within your lo
 
 - **Rate Limiting:** Be mindful of the rate at which you send requests; sending them too quickly can adversely affect performance. 1 request per second should be the max.
 
+## Legal Notice
+By using this API, you agree to our [Terms of Use](https://tedee.com/terms-of-use-tedee-apis-and-sdks/).
+
 ## Enabling Bridge API
 
 Before you can use the API you must enable it on the Bridge using Tedee mobile application. Open Tedee app and go to selected Bridge -> Settings -> API -> then toggle the switch button.  
 
-![Enabling Bridge API in the mobile app](/overview/images/enable_api.png "Enabling Bridge API in the mobile app")  
+![Enabling Bridge API in the mobile app](/bridge-api/overview/images/enable_api.png "Enabling Bridge API in the mobile app")  
 
 Available options:
 
