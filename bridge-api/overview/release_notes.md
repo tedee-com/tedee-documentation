@@ -2,7 +2,7 @@
 
 ## PIN management
 
-Bridge firmware **TBD** adds endpoints to manage the PIN codes stored on a Tedee Lock:
+New endpoints to manage the PIN codes stored on a Tedee Lock:
 
 - `GET /lock/{deviceId}/pin` - list the PINs (id and alias)
 - `POST /lock/{deviceId}/pin` - create a PIN
