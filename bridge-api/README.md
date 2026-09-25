@@ -48,6 +48,7 @@ The documentation is:
 
 - **Bridge Management**: Obtain detailed information about the state and connectivity of your Tedee Bridge.
 - **Lock Operations**: Control and monitor Tedee Locks paired with the Tedee Bridge. Features include locking, unlocking, and retrieving lock status.
+- **PIN Management**: List, create, read, update and delete the PIN codes stored on a Tedee Lock.
 - **Callback Servers (Webhooks)**: Implement webhooks for real-time updates and notifications.
 - **API Versioning**: Ensure compatibility and leverage the latest features with well-documented versioning.
 
@@ -63,6 +64,7 @@ Secure access to the API is ensured through token-based authentication. Follow t
 
 - `/bridge`: Manage and retrieve information about your Tedee Bridge.
 - `/lock`: List and manage Tedee Locks. Detailed endpoints are available for lock operations like locking, unlocking, and status retrieval.
+- `/lock/{deviceId}/pin`: Manage the PIN codes stored on a Tedee Lock.
 - `/callback`: Configure webhooks to receive real-time updates about various events. Detailed documentation is available under the `Webhook` section.
 
 ## Further Information
