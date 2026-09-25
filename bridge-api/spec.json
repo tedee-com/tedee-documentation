@@ -48,12 +48,6 @@
       }
     },
     {
-      "name": "Release notes",
-      "description": {
-        "$ref": "/bridge-api/overview/release_notes.md"
-      }
-    },
-    {
       "name": "Authenticate",
       "description": {
         "$ref": "/bridge-api/howtos/authenticate.md"
@@ -95,8 +89,7 @@
       "name": "OVERVIEW",
       "tags": [
         "Getting started",
-        "API versioning",
-        "Release notes"
+        "API versioning"
       ]
     },
     {

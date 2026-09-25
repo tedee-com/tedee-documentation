@@ -69,7 +69,7 @@ Secure access to the API is ensured through token-based authentication. Follow t
 
 ## Further Information
 
-For additional information, refer to the `Useful links` section. Stay updated with the latest changes and improvements in the `Release Notes`.
+For additional information, refer to the `Useful links` section.
 
 ## Contact
 
