@@ -11,7 +11,7 @@
       "email": "support@tedee.com",
       "name": "us"
     },
-    "version": "1.2"
+    "version": "1.19"
   },
   "servers": [
     {
@@ -32,6 +32,10 @@
       "description": "Everything about callback servers (webhooks)"
     },
     {
+      "name": "Pin",
+      "description": "PIN management for Tedee Locks paired with Bridge"
+    },
+    {
       "name": "Getting started",
       "description": {
         "$ref": "/bridge-api/overview/getting_started.md"
@@ -41,12 +45,6 @@
       "name": "API versioning",
       "description": {
         "$ref": "/bridge-api/overview/api_versioning.md"
-      }
-    },
-    {
-      "name": "Release notes",
-      "description": {
-        "$ref": "/bridge-api/overview/release_notes.md"
       }
     },
     {
@@ -91,8 +89,7 @@
       "name": "OVERVIEW",
       "tags": [
         "Getting started",
-        "API versioning",
-        "Release notes"
+        "API versioning"
       ]
     },
     {
@@ -109,6 +106,7 @@
         "Bridge",
         "Lock",
         "Callback",
+        "Pin",
         "Events"
       ]
     },
@@ -547,7 +545,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                    "$ref": "#/components/schemas/CallbackIDsingle"
+                  "$ref": "#/components/schemas/CallbackIDsingle"
                 }
               }
             }
@@ -759,6 +757,451 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/CallbackConflict"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      }
+    },
+    "/lock/{deviceId}/pin": {
+      "get": {
+        "tags": [
+          "Pin"
+        ],
+        "summary": "List PINs on a Tedee Lock",
+        "description": "Returns all PINs stored on the selected Tedee Lock (up to the lock's full capacity). Only id and alias are returned per entry. Large lists are streamed using HTTP chunked transfer-encoding, so the response may not carry a Content-Length header. The lock returns about 5 PINs per BLE message and each message takes about 1 second, so 100 PINs take about 20 seconds and 250 PINs about 45 seconds. Set the client timeout per read rather than for the whole response. The Bridge handles one local API request at a time, so other requests wait until the list is complete. Pass the listVersion from the previous response to get 304 Not Modified instead of the full list when nothing has changed.",
+        "operationId": "getPinList",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deviceId"
+          },
+          {
+            "$ref": "#/components/parameters/listVersion"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinList"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "the list has not changed since the listVersion given in the request; no body"
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "device not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceNotFound"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "device is disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDisconnected"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "device reported an error via BLE interface",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBleError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "another PIN operation is in progress on this lock, either another local API request or the Tedee app through the cloud; retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationInProgress"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Pin"
+        ],
+        "summary": "Create a PIN on a Tedee Lock",
+        "description": "Creates a new PIN on the selected Tedee Lock.",
+        "operationId": "createPin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deviceId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PinCreated"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "device not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceNotFound"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "device is disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDisconnected"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "device reported an error via BLE interface. A lock still busy with a previous PIN operation is retried by the Bridge every 500 ms until the request times out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBleError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "another PIN operation is in progress on this lock, either another local API request or the Tedee app through the cloud; retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationInProgress"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      }
+    },
+    "/lock/{deviceId}/pin/{pinId}": {
+      "get": {
+        "tags": [
+          "Pin"
+        ],
+        "summary": "Get a single PIN from a Tedee Lock",
+        "description": "Returns the full details of a single PIN stored on the selected Tedee Lock, including the pin code.",
+        "operationId": "getPinById",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deviceId"
+          },
+          {
+            "$ref": "#/components/parameters/pinId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Pin"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "device or PIN not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceNotFound"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "device is disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDisconnected"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "device reported an error via BLE interface",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBleError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "another PIN operation is in progress on this lock, either another local API request or the Tedee app through the cloud; retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationInProgress"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Pin"
+        ],
+        "summary": "Update a PIN on a Tedee Lock",
+        "description": "Replaces all fields of an existing PIN on the selected Tedee Lock.",
+        "operationId": "updatePin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deviceId"
+          },
+          {
+            "$ref": "#/components/parameters/pinId"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PinUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "successful operation (NO CONTENT)"
+          },
+          "400": {
+            "description": "invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "device or PIN not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceNotFound"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "device is disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDisconnected"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "device reported an error via BLE interface. A lock still busy with a previous PIN operation is retried by the Bridge every 500 ms until the request times out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBleError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "another PIN operation is in progress on this lock, either another local API request or the Tedee app through the cloud; retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationInProgress"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "api_token": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Pin"
+        ],
+        "summary": "Delete a PIN from a Tedee Lock",
+        "description": "Removes a PIN from the selected Tedee Lock.",
+        "operationId": "deletePin",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/deviceId"
+          },
+          {
+            "$ref": "#/components/parameters/pinId"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "successful operation (NO CONTENT)"
+          },
+          "401": {
+            "description": "unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "device or PIN not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceNotFound"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "device is disconnected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceDisconnected"
+                }
+              }
+            }
+          },
+          "406": {
+            "description": "device reported an error via BLE interface. A lock still busy with a previous PIN operation is retried by the Bridge every 500 ms until the request times out.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceBleError"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "another PIN operation is in progress on this lock, either another local API request or the Tedee app through the cloud; retry later",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationInProgress"
                 }
               }
             }
@@ -1019,7 +1462,7 @@
             "examples": [
               2
             ]
-          },          
+          },
           "batteryLevel": {
             "type": "integer",
             "format": "int32",
@@ -1236,6 +1679,288 @@
         "examples": [
           1
         ]
+      },
+      "PinList": {
+        "type": "object",
+        "description": "PIN list envelope returned by GET /lock/{deviceId}/pin.",
+        "properties": {
+          "listVersion": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Version of the PIN list on the lock. It goes up by one whenever a PIN is added, changed or removed, so an empty list can still carry a non-zero version.",
+            "examples": [
+              796
+            ]
+          },
+          "pins": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PinSummary"
+            }
+          }
+        }
+      },
+      "PinSummary": {
+        "type": "object",
+        "description": "Compact PIN record returned in list responses (id and alias only).",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "PIN identifier assigned by the lock",
+            "examples": [
+              1
+            ]
+          },
+          "alias": {
+            "type": "string",
+            "description": "Human-readable label for the PIN",
+            "examples": [
+              "Cleaner"
+            ]
+          }
+        }
+      },
+      "Pin": {
+        "type": "object",
+        "description": "Full PIN record returned by GET /lock/{deviceId}/pin/{pinId}.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "PIN identifier assigned by the lock",
+            "examples": [
+              1
+            ]
+          },
+          "pin": {
+            "type": "string",
+            "description": "PIN code as plain digits (5–8)",
+            "pattern": "^[0-9]{5,8}$",
+            "examples": [
+              "12345"
+            ]
+          },
+          "alias": {
+            "type": "string",
+            "description": "Human-readable label, up to 32 bytes UTF-8 (the lock's limit)",
+            "maxLength": 32,
+            "examples": [
+              "Cleaner"
+            ]
+          },
+          "startDate": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Validity start date as Unix timestamp (0 = unbounded)",
+            "examples": [
+              1748390400
+            ]
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Validity end date as Unix timestamp (0 = unbounded)",
+            "examples": [
+              1756166400
+            ]
+          },
+          "dayStartTime": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Daily access window start, seconds from midnight (0 = unbounded)",
+            "minimum": 0,
+            "maximum": 86399,
+            "examples": [
+              28800
+            ]
+          },
+          "dayEndTime": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Daily access window end, seconds from midnight (0 = unbounded)",
+            "minimum": 0,
+            "maximum": 86399,
+            "examples": [
+              57600
+            ]
+          },
+          "weekdays": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Weekday bitmask: bit 0=Mon … bit 6=Sun. 0x7F (127) = every day.",
+            "minimum": 0,
+            "maximum": 127,
+            "examples": [
+              127
+            ]
+          }
+        }
+      },
+      "PinCreate": {
+        "type": "object",
+        "description": "Request body for POST /lock/{deviceId}/pin.",
+        "required": [
+          "pin",
+          "alias"
+        ],
+        "properties": {
+          "pin": {
+            "type": "string",
+            "description": "PIN code, 5–8 decimal digits (the lock rejects shorter codes)",
+            "pattern": "^[0-9]{5,8}$",
+            "examples": [
+              "12345"
+            ]
+          },
+          "alias": {
+            "type": "string",
+            "description": "Human-readable label, up to 32 bytes UTF-8 (the lock's limit); required, may be empty",
+            "maxLength": 32,
+            "examples": [
+              "Cleaner"
+            ]
+          },
+          "startDate": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Validity start date as Unix timestamp (0 or omitted = unbounded)",
+            "examples": [
+              0
+            ]
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Validity end date as Unix timestamp (0 or omitted = unbounded). Must be greater than startDate when both are non-zero, otherwise 400.",
+            "examples": [
+              0
+            ]
+          },
+          "dayStartTime": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Daily access window start, seconds from midnight 0–86399 (0 or omitted = unbounded)",
+            "minimum": 0,
+            "maximum": 86399,
+            "examples": [
+              0
+            ]
+          },
+          "dayEndTime": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Daily access window end, seconds from midnight 0–86399 (0 or omitted = unbounded). Must be >= dayStartTime when both non-zero.",
+            "minimum": 0,
+            "maximum": 86399,
+            "examples": [
+              0
+            ]
+          },
+          "weekdays": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Weekday bitmask: bit 0=Mon … bit 6=Sun. 0x7F (127) = every day. Defaults to 127.",
+            "minimum": 0,
+            "maximum": 127,
+            "examples": [
+              127
+            ]
+          }
+        }
+      },
+      "PinUpdate": {
+        "type": "object",
+        "description": "Request body for PUT /lock/{deviceId}/pin/{pinId}. All fields replace the existing PIN record.",
+        "required": [
+          "pin",
+          "alias"
+        ],
+        "properties": {
+          "pin": {
+            "type": "string",
+            "description": "PIN code, 5–8 decimal digits (the lock rejects shorter codes)",
+            "pattern": "^[0-9]{5,8}$",
+            "examples": [
+              "56789"
+            ]
+          },
+          "alias": {
+            "type": "string",
+            "description": "Human-readable label, up to 32 bytes UTF-8 (the lock's limit)",
+            "maxLength": 32,
+            "examples": [
+              "Cleaner"
+            ]
+          },
+          "startDate": {
+            "type": "integer",
+            "format": "int32",
+            "examples": [
+              0
+            ]
+          },
+          "endDate": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Validity end date as Unix timestamp (0 = unbounded). Must be greater than startDate when both are non-zero, otherwise 400.",
+            "examples": [
+              0
+            ]
+          },
+          "dayStartTime": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 86399,
+            "examples": [
+              0
+            ]
+          },
+          "dayEndTime": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 86399,
+            "examples": [
+              0
+            ]
+          },
+          "weekdays": {
+            "type": "integer",
+            "format": "int32",
+            "minimum": 0,
+            "maximum": 127,
+            "examples": [
+              127
+            ]
+          }
+        }
+      },
+      "PinCreated": {
+        "type": "object",
+        "description": "Response body for POST /lock/{deviceId}/pin.",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "format": "int32",
+            "description": "Newly assigned PIN identifier",
+            "examples": [
+              3
+            ]
+          }
+        }
+      },
+      "OperationInProgress": {
+        "type": "object",
+        "properties": {
+          "error-description": {
+            "type": "string",
+            "examples": [
+              "Operation already in progress"
+            ]
+          }
+        }
       }
     },
     "parameters": {
@@ -1257,6 +1982,28 @@
         "schema": {
           "type": "integer",
           "format": "int32"
+        }
+      },
+      "pinId": {
+        "name": "pinId",
+        "in": "path",
+        "description": "PIN ID",
+        "required": true,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 1
+        }
+      },
+      "listVersion": {
+        "name": "listVersion",
+        "in": "query",
+        "description": "listVersion from a previous response. When it matches the lock's current version the Bridge answers 304 Not Modified without a body. Omit it or pass 0 to always get the full list.",
+        "required": false,
+        "schema": {
+          "type": "integer",
+          "format": "int32",
+          "minimum": 0
         }
       }
     },
