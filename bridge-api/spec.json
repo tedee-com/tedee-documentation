@@ -105,8 +105,8 @@
       "tags": [
         "Bridge",
         "Lock",
-        "Callback",
         "Pin",
+        "Callback",
         "Events"
       ]
     },
