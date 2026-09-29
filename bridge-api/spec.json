@@ -984,6 +984,16 @@
               }
             }
           },
+          "400": {
+            "description": "invalid pinId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
+          },
           "401": {
             "description": "unauthorized",
             "content": {
@@ -1071,7 +1081,7 @@
             "description": "successful operation (NO CONTENT)"
           },
           "400": {
-            "description": "invalid request body",
+            "description": "invalid pinId or request body",
             "content": {
               "application/json": {
                 "schema": {
@@ -1155,6 +1165,16 @@
         "responses": {
           "204": {
             "description": "successful operation (NO CONTENT)"
+          },
+          "400": {
+            "description": "invalid pinId",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InvalidToken"
+                }
+              }
+            }
           },
           "401": {
             "description": "unauthorized",
@@ -1750,25 +1770,34 @@
             ]
           },
           "startDate": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "description": "Validity start date as Unix timestamp (0 = unbounded)",
+            "description": "Validity start date as Unix timestamp (null = unbounded)",
             "examples": [
               1748390400
             ]
           },
           "endDate": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "description": "Validity end date as Unix timestamp (0 = unbounded)",
+            "description": "Validity end date as Unix timestamp (null = unbounded)",
             "examples": [
               1756166400
             ]
           },
           "dayStartTime": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "description": "Daily access window start, seconds from midnight (0 = unbounded)",
+            "description": "Daily access window start, seconds from midnight (null = unbounded)",
             "minimum": 0,
             "maximum": 86399,
             "examples": [
@@ -1776,9 +1805,12 @@
             ]
           },
           "dayEndTime": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "description": "Daily access window end, seconds from midnight (0 = unbounded)",
+            "description": "Daily access window end, seconds from midnight (null = unbounded)",
             "minimum": 0,
             "maximum": 86399,
             "examples": [
@@ -1786,9 +1818,12 @@
             ]
           },
           "weekdays": {
-            "type": "integer",
+            "type": [
+              "integer",
+              "null"
+            ],
             "format": "int32",
-            "description": "Weekday bitmask: bit 0=Mon … bit 6=Sun. 0x7F (127) = every day.",
+            "description": "Weekday bitmask: bit 0=Mon … bit 6=Sun. 0x7F (127) = every day. null = unset.",
             "minimum": 0,
             "maximum": 127,
             "examples": [
@@ -1987,12 +2022,12 @@
       "pinId": {
         "name": "pinId",
         "in": "path",
-        "description": "PIN ID",
+        "description": "PIN ID. Anything other than decimal digits is rejected with 400.",
         "required": true,
         "schema": {
           "type": "integer",
           "format": "int32",
-          "minimum": 1
+          "minimum": 0
         }
       },
       "listVersion": {
