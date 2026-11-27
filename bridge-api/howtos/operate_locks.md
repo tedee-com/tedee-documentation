@@ -84,10 +84,10 @@ Most common codes:
 
 | error-code | Name | Typical cause |
 |---|---|---|
-| 2 | ERROR | The lock is already in the requested position (lock a locked lock, unlock an unlocked lock) |
+| 2 | ERROR | The lock is already in the requested position (lock a locked lock, unlock an unlocked lock), or pull spring was requested on a locked lock |
 | 3 | BUSY | The lock is moving or not stable, try again later |
-| 5 | NOT_CALIBRATED | The lock is not calibrated |
-| 8 | NOT_CONFIGURED | Pull spring is not calibrated |
+| 5 | NOT_CALIBRATED | The lock or its pull spring is not calibrated |
+| 8 | NOT_CONFIGURED | Pull spring is disabled in the lock settings |
 | 9 | DISMOUNTED | The lock is not mounted on the door |
 
 The full list of codes is in the 406 response of the [Lock](/#tag/Lock/operation/postLock) endpoint.
