@@ -73,3 +73,21 @@ To perform pull spring you can also use Unlock request with optional parameter.
 The response is sent immediately after the locking action has started. The result of the action can be checked by sending a [sync request](/#tag/Get-and-sync-locks) or via the [Webhook/callback event](/#tag/About-webhooks) - if configured. 
 
 If you didn't calibrate pull spring this endpoint will return an error code indicating the lock is not calibrated for pull spring.
+
+## Errors reported by the lock
+
+If the lock refuses the command, you will receive an HTTP status code 406 and the lock's result code in the `error-code` field, for example:
+
+    {"error-code":2, "error-description":"BLE API error"}
+
+Most common codes:
+
+| error-code | Name | Typical cause |
+|---|---|---|
+| 2 | ERROR | The lock is already in the requested position (lock a locked lock, unlock an unlocked lock), or pull spring was requested on a locked lock |
+| 3 | BUSY | The lock is moving or not stable, try again later |
+| 5 | NOT_CALIBRATED | The lock or its pull spring is not calibrated |
+| 8 | NOT_CONFIGURED | Pull spring is disabled in the lock settings |
+| 9 | DISMOUNTED | The lock is not mounted on the door |
+
+The full list of codes is in the 406 response of the [Lock](/#tag/Lock/operation/postLock) endpoint.
